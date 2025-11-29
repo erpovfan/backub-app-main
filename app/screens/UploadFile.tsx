@@ -38,7 +38,7 @@ const UploadFile = () => {
 
         console.log("FormData آماده شد ✅");
         upload(fd);
-        router.push("/screens/Home");
+        router.replace("/screens/Home");
         console.log("212");
       } else {
         console.log("User canceled file picker");

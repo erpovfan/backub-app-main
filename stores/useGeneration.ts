@@ -27,11 +27,14 @@ export const useGeneration = create<IGenerationState>((set) => ({
         set({ error: "No data returned from API", loading: false });
         return;
       }
-      set({
-        allItemsData: data.data,
 
-        loading: false,
+      // In useGeneration.ts, after getting data from backend:
+      const sortedData = data.data.sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return dateB - dateA; // Newest first
       });
+      set({ allItemsData: sortedData, loading: false });
     } catch (err: any) {
       set({ error: err.message, loading: false });
     }
