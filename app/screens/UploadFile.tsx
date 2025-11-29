@@ -1,17 +1,14 @@
 import { useAudioData } from "@/stores/useAudioData";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import * as DocumentPicker from "expo-document-picker";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const UploadFile = () => {
   const router = useRouter();
-  const [selectedFile, setSelectedFile] =
-    useState<DocumentPicker.DocumentPickerAsset | null>(null);
-  const [formData, setFormData] = useState<FormData | null>(null);
-  const { audioData, upload } = useAudioData();
+  const { upload } = useAudioData();
 
   const pickAudioFile = async () => {
     try {
@@ -24,7 +21,6 @@ const UploadFile = () => {
         const file = result.assets[0];
         console.log("Selected file:", file);
         console.log(file.uri);
-        setSelectedFile(file);
 
         // آماده‌سازی فرم دیتا بدون base64
         const fd = new FormData();
@@ -33,8 +29,6 @@ const UploadFile = () => {
           name: file.name || "audio.m4a",
           type: file.mimeType || "audio/m4a",
         } as any);
-
-        setFormData(fd);
 
         console.log("FormData آماده شد ✅");
         upload(fd);
@@ -48,49 +42,83 @@ const UploadFile = () => {
     }
   };
 
-  useEffect(() => {
-    if (audioData) {
-      console.log("audioData", audioData);
-    }
-  }, [audioData]);
-
   return (
-    <SafeAreaView className="flex-1 px-5 pt-2 bg-white w-full">
-      <View className="w-full flex flex-row justify-end pt-5 pb-9">
-        <TouchableOpacity onPress={() => router.push("/screens/Home")}>
-          <MaterialCommunityIcons name="close" size={22} color="gray" />
-        </TouchableOpacity>
-      </View>
-
-      <View className="w-full flex-1">
-        <View className="w-full">
-          <Text className="text-3xl font-semibold">Upload a file</Text>
-          <Text className="text-xl py-2 text-gray-500">
-            Select an audio file or transcript or notes.
-          </Text>
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="flex-1 w-full">
+        {/* Header */}
+        <View className="flex flex-row justify-between items-center px-5 pt-2 pb-3">
+          <TouchableOpacity
+            onPress={() => router.push("/screens/Home")}
+            className="w-10 h-10 rounded-full bg-white items-center justify-center shadow-sm"
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 3,
+              elevation: 3,
+            }}
+          >
+            <Ionicons name="close" size={22} color="#374151" />
+          </TouchableOpacity>
+          <View className="flex-1 items-center">
+            <Text className="text-xl font-semibold text-gray-900">
+              Upload File
+            </Text>
+          </View>
+          <View className="w-10" />
         </View>
 
-        {/* <View className="w-full pt-6">
-          <TouchableOpacity className="flex flex-row justify-center items-center gap-x-2">
-            <Text className="text-2xl text-blue-600">Language Setting</Text>
-            <Feather name="settings" size={24} color="#2563eb" />
+        {/* Main Content */}
+        <View className="flex-1 items-center px-6" style={{ marginTop: -30 }}>
+          {/* Upload Area */}
+          <View className="w-full items-center mt-8">
+            <TouchableOpacity
+              onPress={pickAudioFile}
+              activeOpacity={0.8}
+              className="w-full rounded-3xl p-12 items-center justify-center border-2 border-dashed"
+              style={{
+                backgroundColor: "#f9fafb",
+                borderColor: "#d1d5db",
+              }}
+            >
+              <View
+                className="w-20 h-20 rounded-2xl items-center justify-center mb-6"
+                style={{ backgroundColor: "#eff6ff" }}
+              >
+                <Ionicons
+                  name="cloud-upload-outline"
+                  size={40}
+                  color="#2563eb"
+                />
+              </View>
+              <Text className="text-2xl font-bold text-gray-900 mb-2">
+                Upload File
+              </Text>
+              <Text className="text-base text-gray-500 text-center px-4">
+                Select an audio file from your device
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Select Button */}
+          <TouchableOpacity
+            onPress={pickAudioFile}
+            activeOpacity={0.8}
+            className="w-full bg-blue-600 rounded-2xl mt-8 flex-row items-center justify-center gap-x-3"
+            style={{
+              shadowColor: "#2563eb",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 5,
+            }}
+          >
+            <Ionicons name="folder-open-outline" size={24} color="white" />
+            <Text className="text-white text-lg font-semibold py-4">
+              Choose File
+            </Text>
           </TouchableOpacity>
-        </View> */}
-
-        <TouchableOpacity
-          className="w-full bg-blue-600 rounded-full mt-10"
-          onPress={pickAudioFile}
-        >
-          <Text className="text-center text-2xl text-white py-3 font-semibold">
-            Select file
-          </Text>
-        </TouchableOpacity>
-
-        {selectedFile && (
-          <Text className="text-center mt-5 text-gray-700">
-            Selected: {selectedFile.name}
-          </Text>
-        )}
+        </View>
       </View>
     </SafeAreaView>
   );
