@@ -278,7 +278,7 @@ const RecordAudio = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 w-full">
         {/* Header */}
-        <View className="flex flex-row justify-between items-center px-5 pt-3 pb-4">
+        <View className="flex flex-row justify-between items-center px-5 pt-2 pb-3">
           <TouchableOpacity
             onPress={() => router.push("/screens/Home")}
             className="w-10 h-10 rounded-full bg-white items-center justify-center shadow-sm"
@@ -328,11 +328,14 @@ const RecordAudio = () => {
         </View>
 
         {/* Main Content Area */}
-        <View className="flex-1 justify-center items-center px-6">
+        <View
+          className="flex-1 items-center px-6"
+          style={{ justifyContent: "center", marginTop: -50 }}
+        >
           {!recordedUri || recorderState.isRecording ? (
             <>
               {/* Timer Display - Prominent */}
-              <View className="mb-8 items-center">
+              <View className="mb-6 items-center">
                 <Text
                   className={`text-6xl font-mono font-bold mb-2 ${
                     recorderState.isRecording ? "text-red-600" : "text-gray-400"
@@ -353,7 +356,7 @@ const RecordAudio = () => {
               </View>
 
               {/* Recording Button */}
-              <View className="items-center mb-8 relative">
+              <View className="items-center mb-6 relative">
                 <TouchableOpacity
                   onPress={() => {
                     if (recorderState.isRecording) {
@@ -411,7 +414,7 @@ const RecordAudio = () => {
               </View>
 
               {/* Instruction Text */}
-              <Text className="text-center text-base text-gray-600 font-medium px-8">
+              <Text className="text-center text-base text-gray-600 font-medium px-8 mt-2">
                 {recorderState.isRecording
                   ? "Tap the button again to stop recording"
                   : "Tap the microphone to start recording your minutes"}
@@ -419,9 +422,9 @@ const RecordAudio = () => {
             </>
           ) : (
             /* After Recording - Action Options */
-            <View className="w-full items-center">
+            <View className="w-full items-center" style={{ marginTop: -20 }}>
               {/* Success Message */}
-              <View className="mb-8 items-center">
+              <View className="mb-6 items-center">
                 <View className="w-20 h-20 bg-green-100 rounded-full items-center justify-center mb-4">
                   <Ionicons name="checkmark-circle" size={56} color="#10b981" />
                 </View>
