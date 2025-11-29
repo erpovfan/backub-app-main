@@ -19,96 +19,147 @@ import { Text, TouchableOpacity, View } from "react-native";
 
 const NoteOptions = () => {
   const { isVisible, setIsVisible } = useNoteOptions();
-  const snappoint = useMemo(() => ["45%"], []);
+  const snapPoints = useMemo(() => ["50%"], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const router = useRouter();
+
   const handleSheetChanges = useCallback(
     (index: number) => {
-      console.log("handleSheetChanges", index);
-      if (index === -1) setIsVisible(false);
+      if (index === -1) {
+        setIsVisible(false);
+      }
     },
     [setIsVisible]
   );
-  const router = useRouter();
 
-  if (!isVisible) return null;
+  const handleClose = useCallback(() => {
+    bottomSheetRef.current?.close();
+    setIsVisible(false);
+  }, [setIsVisible]);
+
+  const handleOptionPress = useCallback(
+    (route: string) => {
+      setIsVisible(false);
+      router.push(route as any);
+    },
+    [router, setIsVisible]
+  );
+
   return (
     <BottomSheet
+      ref={bottomSheetRef}
+      index={isVisible ? 0 : -1}
+      snapPoints={snapPoints}
       onChange={handleSheetChanges}
       enablePanDownToClose
-      onClose={() => setIsVisible(false)}
-      ref={bottomSheetRef}
-      snapPoints={snappoint}
+      onClose={handleClose}
+      backgroundStyle={{ backgroundColor: "#ffffff" }}
+      handleIndicatorStyle={{ backgroundColor: "#d1d5db", width: 40 }}
       backdropComponent={(props) => (
         <BottomSheetBackdrop
           {...props}
           appearsOnIndex={0}
           disappearsOnIndex={-1}
           pressBehavior="close"
+          opacity={0.5}
         />
       )}
     >
-      <BottomSheetView className=" pb-6 h-full   ">
-        <View className=" bg-white flex flex-1 flex-col w-full px-3 h-[25rem] ">
-          <View className="w-full flex flex-row justify-between items-center pt-4 pb-10">
-            <Text className="font-bold text-xl">New Minutes</Text>
-            <View className="flex flex-row items-center gap-x-2 ">
-              <AntDesign
-                name="close"
-                size={20}
-                color="black"
-                className="pr-2 "
-                onPress={() => setIsVisible(false)}
-              />
-            </View>
+      <BottomSheetView className="pb-6 h-full">
+        <View className="bg-white flex flex-1 flex-col w-full px-4 h-[25rem]">
+          <View className="w-full flex flex-row justify-between items-center pt-3 pb-8">
+            <Text className="font-bold text-2xl text-gray-900">
+              New Minutes
+            </Text>
+            <TouchableOpacity
+              onPress={handleClose}
+              className="w-8 h-8 items-center justify-center"
+              activeOpacity={0.6}
+            >
+              <AntDesign name="close" size={22} color="#6b7280" />
+            </TouchableOpacity>
           </View>
-          <View className="flex flex-col gap-y-4 w-full  ">
+          <View className="flex flex-col gap-y-3 w-full">
             {/* 1 */}
             <TouchableOpacity
-              onPress={() => {
-                setIsVisible(false);
-                router.push("/screens/RecordAudio");
+              onPress={() => handleOptionPress("/screens/RecordAudio")}
+              activeOpacity={0.7}
+              className="flex flex-row justify-between items-center mx-1 py-4 px-5 rounded-xl"
+              style={{
+                backgroundColor: "#eff6ff",
+                borderWidth: 1,
+                borderColor: "#dbeafe",
               }}
-              className="flex flex-row justify-between h-[25%] items-center bg-blue-100 mx-1 py-5 px-4 rounded-lg"
             >
               <View className="flex flex-row justify-center items-center gap-x-4">
-                <View className="bg-blue-600 rounded-full size-9 flex flex-row justify-center items-center">
-                  <FontAwesome5 name="microphone" size={15} color="white" />
+                <View
+                  className="rounded-xl w-12 h-12 flex flex-row justify-center items-center"
+                  style={{ backgroundColor: "#2563eb" }}
+                >
+                  <FontAwesome5 name="microphone" size={16} color="white" />
                 </View>
-                <Text className="text-lg">Record Audio</Text>
+                <Text
+                  className="text-lg font-semibold"
+                  style={{ color: "#1e293b" }}
+                >
+                  Record Audio
+                </Text>
               </View>
-              <MaterialIcons name="navigate-next" size={24} color="black" />
+              <MaterialIcons name="navigate-next" size={24} color="#2563eb" />
             </TouchableOpacity>
             {/* 2 */}
             <TouchableOpacity
-              onPress={() => {
-                setIsVisible(false);
-                router.push("/screens/UploadFile");
+              onPress={() => handleOptionPress("/screens/UploadFile")}
+              activeOpacity={0.7}
+              className="flex flex-row justify-between items-center mx-1 py-4 px-5 rounded-xl"
+              style={{
+                backgroundColor: "#faf5ff",
+                borderWidth: 1,
+                borderColor: "#e9d5ff",
               }}
-              className="flex flex-row justify-between h-[25%] items-center bg-blue-100 mx-1 py-5 px-4 rounded-lg"
             >
               <View className="flex flex-row justify-center items-center gap-x-4">
-                <View className="bg-blue-600 rounded-full size-9 flex flex-row justify-center items-center">
-                  <Entypo name="folder" size={15} color="white" />
+                <View
+                  className="rounded-xl w-12 h-12 flex flex-row justify-center items-center"
+                  style={{ backgroundColor: "#9333ea" }}
+                >
+                  <Entypo name="folder" size={16} color="white" />
                 </View>
-                <Text className="text-lg">Upload from files</Text>
+                <Text
+                  className="text-lg font-semibold"
+                  style={{ color: "#1e293b" }}
+                >
+                  Upload from files
+                </Text>
               </View>
-              <MaterialIcons name="navigate-next" size={24} color="black" />
+              <MaterialIcons name="navigate-next" size={24} color="#9333ea" />
             </TouchableOpacity>
             {/* 3 */}
             <TouchableOpacity
-              onPress={() => {
-                setIsVisible(false);
-                router.push("/screens/YoutubeVideo");
+              onPress={() => handleOptionPress("/screens/YoutubeVideo")}
+              activeOpacity={0.7}
+              className="flex flex-row justify-between items-center mx-1 py-4 px-5 rounded-xl"
+              style={{
+                backgroundColor: "#fef2f2",
+                borderWidth: 1,
+                borderColor: "#fecaca",
               }}
-              className="flex h-[25%] flex-row justify-between items-center bg-blue-100 mx-1 py-5 px-4 rounded-lg"
             >
               <View className="flex flex-row justify-center items-center gap-x-4">
-                <View className="bg-blue-600 rounded-full size-9 flex flex-row justify-center items-center">
-                  <Entypo name="controller-play" size={15} color="white" />
+                <View
+                  className="rounded-xl w-12 h-12 flex flex-row justify-center items-center"
+                  style={{ backgroundColor: "#dc2626" }}
+                >
+                  <Entypo name="controller-play" size={16} color="white" />
                 </View>
-                <Text className="text-lg">YouTube Video</Text>
+                <Text
+                  className="text-lg font-semibold"
+                  style={{ color: "#1e293b" }}
+                >
+                  YouTube Video
+                </Text>
               </View>
-              <MaterialIcons name="navigate-next" size={24} color="black" />
+              <MaterialIcons name="navigate-next" size={24} color="#dc2626" />
             </TouchableOpacity>
           </View>
         </View>

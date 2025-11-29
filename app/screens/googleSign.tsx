@@ -15,11 +15,10 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+const webClientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT || "";
 const GoogleSignIn = () => {
   GoogleSignin.configure({
-    webClientId:
-      "731422422322-a5c95g122m4ug6u4hjeb5qkfnot8om4l.apps.googleusercontent.com",
+    webClientId: webClientId,
   });
 
   const { googleAuth, token, loading } = useAuth();
